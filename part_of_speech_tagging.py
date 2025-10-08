@@ -8,6 +8,7 @@ import torch
 import torch.nn.functional as F
 import onnxruntime as ort
 import numpy as np
+from optimum.exporters.onnx import main_export
 
 # Model and input
 model_id = "QCRI/bert-base-multilingual-cased-pos-english"
