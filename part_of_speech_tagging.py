@@ -7,8 +7,9 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification, TokenCl
 import torch
 import torch.nn.functional as F
 import onnxruntime as ort
-import numpy as np
 from optimum.exporters.onnx import main_export
+import numpy as np
+
 
 # Model and input
 model_id = "QCRI/bert-base-multilingual-cased-pos-english"
