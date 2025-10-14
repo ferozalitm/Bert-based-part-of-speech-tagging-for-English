@@ -1,8 +1,10 @@
 # Author: T M Feroz Ali
+#
 # Description:
 # 1. Bert-based-part-of-speech-tagging-for-English model
 # 2. Export to onnx using torch.onnx.export (which takes input data)
-# 3. Compare the outputs between onnx and pytorch model
+# 3. Pad the input tokens to make it fixed length
+# 4. Wrap the BERT model with another class to get clean model outputting only logits
 
 import torch
 from transformers import AutoTokenizer, AutoModelForTokenClassification
@@ -15,7 +17,13 @@ model.eval()
 
 # Sample input
 text = "Where can I find an oven"
-inputs = tokenizer(text, return_tensors="pt")
+inputs = tokenizer(text, return_tensors="pt", 
+    padding="max_length",     # Pad to max_length
+    max_length=32,            # Desired fixed length
+    truncation=True           # Truncate if input is longer than max_length
+)
+
+breakpoint()
 
 # Sample output
 with torch.no_grad():
@@ -46,7 +54,7 @@ wrapped_model = TokenClassificationWrapper(model)
 with torch.no_grad():
     output_logits = wrapped_model(**inputs)
 
-breakpoint()
+
 # Prepare the input and output names and data for onnx conversion
 # Check if token_type_ids is required
 input_names = ["input_ids", "attention_mask"]
@@ -62,7 +70,7 @@ torch.onnx.export(
     input_tensors,
     "bert_model_qcri_pos_tagging.onnx",
     input_names=input_names,
-    output_names=["output"],  # Use generic name
+    output_names=["output_logits"],  # Use generic name
     opset_version=14         # Use a newer opset version
 )
 
