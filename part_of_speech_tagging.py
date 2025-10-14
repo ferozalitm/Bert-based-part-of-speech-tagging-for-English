@@ -1,7 +1,8 @@
 # Author: T M Feroz Ali
 # Description:
 # 1. Bert-based-part-of-speech-tagging-for-English
-# 2. Export to onnx and compare the outputs
+# 2. Export to onnx using optimum.exporters.onnx import main_export 
+# 3. Compare the outputs between onnx and pytorch model
 
 from transformers import AutoTokenizer, AutoModelForTokenClassification, TokenClassificationPipeline
 import torch
